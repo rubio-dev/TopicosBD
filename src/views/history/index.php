@@ -59,7 +59,7 @@ declare(strict_types=1);
     </form>
 
     <?php if ($selectedStudent): ?>
-        <hr style="margin: 16px 0; border: none; border-top: 1px solid rgba(148,163,184,0.4);">
+        <hr class="tb-separator">
 
         <div class="tb-group-info">
             <p>
@@ -76,11 +76,11 @@ declare(strict_types=1);
         </div>
 
         <?php if (empty($history)): ?>
-            <div class="tb-alert tb-alert-info" style="margin-top: 16px;">
+            <div class="tb-alert tb-alert-info tb-mt-4">
                 El alumno no tiene materias registradas en su historial.
             </div>
         <?php else: ?>
-            <div class="tb-table-wrapper" style="margin-top: 16px;">
+            <div class="tb-table-wrapper tb-mt-4">
                 <table class="tb-table">
                     <thead>
                     <tr>
@@ -108,20 +108,20 @@ declare(strict_types=1);
                         ];
                         $estatus = $estatusMap[$row['estatus']] ?? $row['estatus'];
 
-                        // Color de fila según estatus
-                        $rowStyle = '';
+                        // Clase de fila según estatus
+                        $rowClass = '';
                         if ($row['estatus'] === 'R') {
-                            $rowStyle = 'background-color: rgba(239, 68, 68, 0.05);'; // Rojo muy suave
+                            $rowClass = 'tb-row-red';
                         } elseif ($row['estatus'] === 'C') {
-                            $rowStyle = 'background-color: rgba(59, 130, 246, 0.05);'; // Azul muy suave
+                            $rowClass = 'tb-row-blue';
                         }
                         ?>
-                        <tr style="<?= $rowStyle ?>">
+                        <tr class="<?= $rowClass ?>">
                             <td><?= $periodoStr ?></td>
                             <td><?= htmlspecialchars($row['clave_materia'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars($row['materia'], ENT_QUOTES, 'UTF-8') ?></td>
                             <td><?= htmlspecialchars((string)$row['semestre_materia'], ENT_QUOTES, 'UTF-8') ?></td>
-                            <td style="font-weight: 600;">
+                            <td class="tb-font-bold">
                                 <?= $row['calificacion'] !== null ? htmlspecialchars((string)$row['calificacion'], ENT_QUOTES, 'UTF-8') : '-' ?>
                             </td>
                             <td>

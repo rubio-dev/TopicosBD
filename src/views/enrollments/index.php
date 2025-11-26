@@ -91,7 +91,7 @@ declare(strict_types=1);
     </form>
 
     <?php if (!empty($selectedStudent) && !empty($selectedPeriod)): ?>
-        <hr style="margin: 14px 0; border: none; border-top: 1px solid rgba(148,163,184,0.4);">
+        <hr class="tb-separator">
 
         <!-- Resumen de alumno / periodo -->
         <div class="tb-group-info">
@@ -116,7 +116,7 @@ declare(strict_types=1);
             <!-- Carga activa -->
             <h3 class="tb-groups-title">Carga activa en este periodo</h3>
 
-            <p style="font-size: 13px; margin-top: 2px;">
+            <p class="tb-text-small tb-mt-2">
                 <strong>ID carga:</strong>
                 <?= htmlspecialchars((string)$activeLoad['id_carga'], ENT_QUOTES, 'UTF-8') ?>
                 · <strong>Fecha alta:</strong>
@@ -127,8 +127,7 @@ declare(strict_types=1);
 
             <form method="post"
                   action="index.php?m=cargas&a=cancel"
-                  class="tb-form tb-form-inline"
-                  style="margin-top: 8px; margin-bottom: 12px;">
+                  class="tb-form tb-form-inline tb-mt-2 tb-mb-3">
                 <input type="hidden" name="id_carga"
                        value="<?= htmlspecialchars((string)$activeLoad['id_carga'], ENT_QUOTES, 'UTF-8') ?>">
                 <input type="hidden" name="id_alumno"
@@ -169,14 +168,14 @@ declare(strict_types=1);
                 <p>La carga activa no tiene materias en el detalle.</p>
             <?php endif; ?>
 
-            <p style="font-size: 12px; opacity: 0.8; margin-top: 8px;">
+            <p class="tb-text-xsmall tb-text-muted tb-mt-2">
                 Puedes cancelar la carga completa o agregar materias manualmente con las secciones de abajo.
             </p>
 
         <?php else: ?>
             <!-- No hay carga activa -->
             <h3 class="tb-groups-title">No hay carga activa en este periodo</h3>
-            <p style="font-size: 13px;">
+            <p class="tb-text-small">
                 Puedes generar una carga automática si el alumno es regular<br>
                 o usar una carga manual para alumnos irregulares.
             </p>
@@ -215,7 +214,7 @@ declare(strict_types=1);
                     </div>
                 </form>
             <?php else: ?>
-                <p style="font-size: 13px;">
+                <p class="tb-text-small">
                     No hay grupos disponibles en este periodo para el semestre actual del alumno.
                 </p>
             <?php endif; ?>
@@ -225,23 +224,23 @@ declare(strict_types=1);
         <!-- =============================
              Sección de CARGA MANUAL
              ============================= -->
-        <hr style="margin: 16px 0; border: none; border-top: 1px dashed rgba(148,163,184,0.6);">
+        <hr class="tb-separator-dashed">
 
-        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+        <div class="tb-flex-between">
             <h3 class="tb-groups-title" style="margin-bottom: 0;">Carga manual (agregar materias)</h3>
-            <button type="button" id="btnToggleManual" class="tb-btn tb-btn-outline" style="font-size: 13px; padding: 4px 12px;">
+            <button type="button" id="btnToggleManual" class="tb-btn tb-btn-outline tb-text-small" style="padding: 4px 12px;">
                 Mostrar/Ocultar
             </button>
         </div>
 
         <div id="manualLoadSection" style="display: none;">
-            <p style="font-size: 13px; margin-bottom: 8px;">
+            <p class="tb-text-small tb-mb-2">
                 Selecciona materias reprobadas para recursar y/o materias nuevas
                 para las que el alumno ya cumple prerequisitos.
             </p>
 
             <?php if (empty($retakeOptions) && empty($newOptions)): ?>
-                <p style="font-size: 13px;">
+                <p class="tb-text-small">
                     No hay materias disponibles para carga manual en este periodo.
                 </p>
             <?php else: ?>
@@ -254,8 +253,8 @@ declare(strict_types=1);
                            value="<?= htmlspecialchars($selectedPeriod['id_periodo'], ENT_QUOTES, 'UTF-8') ?>">
 
                     <?php if (!empty($retakeOptions)): ?>
-                        <div class="tb-table-wrapper" style="margin-bottom: 12px;">
-                            <h4 style="font-size: 14px; margin-bottom: 4px;">Materias reprobadas que puede recursar</h4>
+                        <div class="tb-table-wrapper tb-mb-3">
+                            <h4 class="tb-text-small tb-mb-1">Materias reprobadas que puede recursar</h4>
                             <table class="tb-table tb-table-compact">
                                 <thead>
                                 <tr>
@@ -288,8 +287,8 @@ declare(strict_types=1);
                     <?php endif; ?>
 
                     <?php if (!empty($newOptions)): ?>
-                        <div class="tb-table-wrapper" style="margin-bottom: 12px;">
-                            <h4 style="font-size: 14px; margin-bottom: 4px;">Materias nuevas disponibles</h4>
+                        <div class="tb-table-wrapper tb-mb-3">
+                            <h4 class="tb-text-small tb-mb-1">Materias nuevas disponibles</h4>
                             <table class="tb-table tb-table-compact">
                                 <thead>
                                 <tr>

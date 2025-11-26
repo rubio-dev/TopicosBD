@@ -6,7 +6,7 @@ require_once __DIR__ . '/../../config/db.php';
 /**
  * HistoryModel
  *
- * Maneja el historial de materias y la captura de calificaciones.
+ * Maneja la consulta del historial de materias.
  */
 class HistoryModel
 {

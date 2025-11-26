@@ -2,24 +2,21 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../models/StudentModel.php';
-require_once __DIR__ . '/../models/PeriodModel.php';
 require_once __DIR__ . '/../models/HistoryModel.php';
 
 /**
  * HistoryController
  *
- * Controlador para historial y calificaciones.
+ * Controlador para historial académico (solo lectura).
  */
 class HistoryController
 {
     private StudentModel $studentModel;
-    private PeriodModel  $periodModel;
     private HistoryModel $historyModel;
 
     public function __construct()
     {
         $this->studentModel = new StudentModel();
-        $this->periodModel  = new PeriodModel();
         $this->historyModel = new HistoryModel();
     }
 

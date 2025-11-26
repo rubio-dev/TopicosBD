@@ -140,7 +140,7 @@ if ($modulo !== null && $accion !== null) {
             <!-- HISTORIAL / CALIFICACIONES -->
             <article class="tb-card tb-card-sand">
                 <div class="tb-card-header">
-                    <h3>Historial y calificaciones</h3>
+                    <h3>Historial</h3>
                     <span class="tb-card-tag">Kardex</span>
                 </div>
                 <p class="tb-card-text">
