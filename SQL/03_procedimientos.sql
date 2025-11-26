@@ -66,8 +66,14 @@ BEGIN
     END IF;
 
     /* Creación de carga y detalle */
-
+    
     START TRANSACTION;
+
+    /* Limpiar carga cancelada previa si existe (para evitar error de duplicado) */
+    DELETE FROM carga_academica
+    WHERE id_alumno = p_id_alumno
+      AND id_periodo = p_id_periodo
+      AND estatus = 'C';
 
     INSERT INTO carga_academica (id_alumno, id_periodo)
     VALUES (p_id_alumno, p_id_periodo);

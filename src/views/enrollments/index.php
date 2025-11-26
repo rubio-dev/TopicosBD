@@ -14,6 +14,8 @@ declare(strict_types=1);
  *  - $activeLoad        : array|null
  *  - $loadDetails       : array
  *  - $groupsForSemester : array
+ *  - $retakeOptions     : array (reprobadas recursables)
+ *  - $newOptions        : array (materias nuevas disponibles)
  *  - $errorMsg          : string
  *  - $successMsg        : string
  */
@@ -123,6 +125,21 @@ declare(strict_types=1);
                 <?= htmlspecialchars($activeLoad['estatus'], ENT_QUOTES, 'UTF-8') ?>
             </p>
 
+            <form method="post"
+                  action="index.php?m=cargas&a=cancel"
+                  class="tb-form tb-form-inline"
+                  style="margin-top: 8px; margin-bottom: 12px;">
+                <input type="hidden" name="id_carga"
+                       value="<?= htmlspecialchars((string)$activeLoad['id_carga'], ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="id_alumno"
+                       value="<?= htmlspecialchars($selectedStudent['id_alumno'], ENT_QUOTES, 'UTF-8') ?>">
+                <input type="hidden" name="id_periodo"
+                       value="<?= htmlspecialchars($selectedPeriod['id_periodo'], ENT_QUOTES, 'UTF-8') ?>">
+                <button type="submit" class="tb-btn tb-btn-outline">
+                    Cancelar carga
+                </button>
+            </form>
+
             <?php if (!empty($loadDetails)): ?>
                 <div class="tb-table-wrapper">
                     <table class="tb-table">
@@ -153,7 +170,7 @@ declare(strict_types=1);
             <?php endif; ?>
 
             <p style="font-size: 12px; opacity: 0.8; margin-top: 8px;">
-                (Acciones como cancelar carga o quitar materias las podemos agregar después.)
+                Puedes cancelar la carga completa o agregar materias manualmente con las secciones de abajo.
             </p>
 
         <?php else: ?>
@@ -161,7 +178,7 @@ declare(strict_types=1);
             <h3 class="tb-groups-title">No hay carga activa en este periodo</h3>
             <p style="font-size: 13px;">
                 Puedes generar una carga automática si el alumno es regular<br>
-                o más adelante usar una carga manual para alumnos irregulares.
+                o usar una carga manual para alumnos irregulares.
             </p>
 
             <?php if (!empty($groupsForSemester)): ?>
@@ -195,9 +212,6 @@ declare(strict_types=1);
                         <button type="submit" class="tb-btn">
                             Crear carga automática
                         </button>
-                        <button type="button" class="tb-btn tb-btn-outline" disabled>
-                            Carga manual (próximamente)
-                        </button>
                     </div>
                 </form>
             <?php else: ?>
@@ -207,6 +221,130 @@ declare(strict_types=1);
             <?php endif; ?>
 
         <?php endif; ?>
+
+        <!-- =============================
+             Sección de CARGA MANUAL
+             ============================= -->
+        <hr style="margin: 16px 0; border: none; border-top: 1px dashed rgba(148,163,184,0.6);">
+
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <h3 class="tb-groups-title" style="margin-bottom: 0;">Carga manual (agregar materias)</h3>
+            <button type="button" id="btnToggleManual" class="tb-btn tb-btn-outline" style="font-size: 13px; padding: 4px 12px;">
+                Mostrar/Ocultar
+            </button>
+        </div>
+
+        <div id="manualLoadSection" style="display: none;">
+            <p style="font-size: 13px; margin-bottom: 8px;">
+                Selecciona materias reprobadas para recursar y/o materias nuevas
+                para las que el alumno ya cumple prerequisitos.
+            </p>
+
+            <?php if (empty($retakeOptions) && empty($newOptions)): ?>
+                <p style="font-size: 13px;">
+                    No hay materias disponibles para carga manual en este periodo.
+                </p>
+            <?php else: ?>
+                <form method="post"
+                      action="index.php?m=cargas&a=addManual"
+                      class="tb-form">
+                    <input type="hidden" name="id_alumno"
+                           value="<?= htmlspecialchars($selectedStudent['id_alumno'], ENT_QUOTES, 'UTF-8') ?>">
+                    <input type="hidden" name="id_periodo"
+                           value="<?= htmlspecialchars($selectedPeriod['id_periodo'], ENT_QUOTES, 'UTF-8') ?>">
+
+                    <?php if (!empty($retakeOptions)): ?>
+                        <div class="tb-table-wrapper" style="margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 4px;">Materias reprobadas que puede recursar</h4>
+                            <table class="tb-table tb-table-compact">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Clave</th>
+                                    <th>Materia</th>
+                                    <th>Grupo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($retakeOptions as $op): ?>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox"
+                                                   name="gm[]"
+                                                   value="<?= (int)$op['id_grupo_materia'] ?>">
+                                        </td>
+                                        <td><?= htmlspecialchars($op['clave_materia'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($op['materia'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td>
+                                            Sem <?= htmlspecialchars((string)$op['semestre'], ENT_QUOTES, 'UTF-8') ?>
+                                            · <?= htmlspecialchars($op['paquete'], ENT_QUOTES, 'UTF-8') ?>
+                                            · <?= htmlspecialchars($op['letra_grupo'], ENT_QUOTES, 'UTF-8') ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if (!empty($newOptions)): ?>
+                        <div class="tb-table-wrapper" style="margin-bottom: 12px;">
+                            <h4 style="font-size: 14px; margin-bottom: 4px;">Materias nuevas disponibles</h4>
+                            <table class="tb-table tb-table-compact">
+                                <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>Clave</th>
+                                    <th>Materia</th>
+                                    <th>Grupo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php foreach ($newOptions as $op): ?>
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox"
+                                                   name="gm[]"
+                                                   value="<?= (int)$op['id_grupo_materia'] ?>">
+                                        </td>
+                                        <td><?= htmlspecialchars($op['clave_materia'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td><?= htmlspecialchars($op['materia'], ENT_QUOTES, 'UTF-8') ?></td>
+                                        <td>
+                                            Sem <?= htmlspecialchars((string)$op['semestre'], ENT_QUOTES, 'UTF-8') ?>
+                                            · <?= htmlspecialchars($op['paquete'], ENT_QUOTES, 'UTF-8') ?>
+                                            · <?= htmlspecialchars($op['letra_grupo'], ENT_QUOTES, 'UTF-8') ?>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    <?php endif; ?>
+
+                    <div class="tb-form-actions">
+                        <button type="submit" class="tb-btn">
+                            Agregar materias seleccionadas
+                        </button>
+                    </div>
+                </form>
+            <?php endif; ?>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const btn = document.getElementById('btnToggleManual');
+                const section = document.getElementById('manualLoadSection');
+                if (btn && section) {
+                    btn.addEventListener('click', function() {
+                        if (section.style.display === 'none') {
+                            section.style.display = 'block';
+                        } else {
+                            section.style.display = 'none';
+                        }
+                    });
+                }
+            });
+        </script>
 
     <?php endif; ?>
 </section>

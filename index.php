@@ -17,9 +17,11 @@ if ($modulo !== null && $accion !== null) {
         require_once __DIR__ . '/src/controllers/GroupController.php';
         $controller = new GroupController();
     } elseif ($modulo === 'cargas') {
-        // NUEVO: módulo de cargas académicas
         require_once __DIR__ . '/src/controllers/EnrollmentController.php';
         $controller = new EnrollmentController();
+    } elseif ($modulo === 'historial') {
+        require_once __DIR__ . '/src/controllers/HistoryController.php';
+        $controller = new HistoryController();
     } else {
         // Otros módulos todavía no implementados: placeholder
         $moduloSeguro = htmlspecialchars($modulo, ENT_QUOTES, 'UTF-8');
@@ -131,12 +133,11 @@ if ($modulo !== null && $accion !== null) {
                 </p>
                 <div class="tb-card-actions">
                     <a href="?m=cargas&a=index" class="tb-btn">Administrar cargas</a>
-                    <!-- Por ahora usamos también index como “buscar” para evitar 404 -->
                     <a href="?m=cargas&a=index" class="tb-btn tb-btn-outline">Buscar alumno</a>
                 </div>
             </article>
 
-            <!-- HISTORIAL / CALIFICACIONES (placeholder) -->
+            <!-- HISTORIAL / CALIFICACIONES -->
             <article class="tb-card tb-card-sand">
                 <div class="tb-card-header">
                     <h3>Historial y calificaciones</h3>
@@ -148,7 +149,7 @@ if ($modulo !== null && $accion !== null) {
                 </p>
                 <div class="tb-card-actions">
                     <a href="?m=historial&a=index" class="tb-btn">Ver historial</a>
-                    <a href="?m=historial&a=captura" class="tb-btn tb-btn-outline">Capturar calificaciones</a>
+                    <a href="?m=historial&a=index" class="tb-btn tb-btn-outline">Capturar calificaciones</a>
                 </div>
             </article>
 
