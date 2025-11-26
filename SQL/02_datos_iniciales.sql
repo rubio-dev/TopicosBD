@@ -122,26 +122,134 @@ INSERT INTO grupo (id_periodo, semestre, paquete, letra_grupo) VALUES
    Horarios de las materias de cada grupo
    ============================ */
 
--- Grupo de 1er semestre: bloque 1
-INSERT INTO grupo_materia (id_grupo, clave_materia, id_bloque_lun, id_bloque_mar, id_bloque_mie, id_bloque_jue, id_bloque_vie)
-SELECT g.id_grupo, m.clave_materia,
-       1 AS lun, 1 AS mar, 1 AS mie, 1 AS jue, 1 AS vie
-FROM   grupo g
-JOIN   materia m ON m.semestre = 1
-WHERE  g.semestre = 1;
+-- Grupo de 1er semestre:
+--  A -> bloque 1 (08-09)
+--  C -> bloque 2 (09-10)
+--  F -> bloque 3 (10-11)
+--  J -> bloque 4 (11-12)
+INSERT INTO grupo_materia (id_grupo, clave_materia,
+                           id_bloque_lun, id_bloque_mar, id_bloque_mie, id_bloque_jue, id_bloque_vie)
+SELECT 
+    g.id_grupo,
+    m.clave_materia,
+    CASE m.clave_materia
+        WHEN 'A' THEN 1
+        WHEN 'C' THEN 2
+        WHEN 'F' THEN 3
+        WHEN 'J' THEN 4
+    END AS id_bloque_lun,
+    CASE m.clave_materia
+        WHEN 'A' THEN 1
+        WHEN 'C' THEN 2
+        WHEN 'F' THEN 3
+        WHEN 'J' THEN 4
+    END AS id_bloque_mar,
+    CASE m.clave_materia
+        WHEN 'A' THEN 1
+        WHEN 'C' THEN 2
+        WHEN 'F' THEN 3
+        WHEN 'J' THEN 4
+    END AS id_bloque_mie,
+    CASE m.clave_materia
+        WHEN 'A' THEN 1
+        WHEN 'C' THEN 2
+        WHEN 'F' THEN 3
+        WHEN 'J' THEN 4
+    END AS id_bloque_jue,
+    CASE m.clave_materia
+        WHEN 'A' THEN 1
+        WHEN 'C' THEN 2
+        WHEN 'F' THEN 3
+        WHEN 'J' THEN 4
+    END AS id_bloque_vie
+FROM grupo g
+JOIN materia m ON m.semestre = 1
+WHERE g.semestre = 1;
 
--- Grupo de 3er semestre: bloque 2
-INSERT INTO grupo_materia (id_grupo, clave_materia, id_bloque_lun, id_bloque_mar, id_bloque_mie, id_bloque_jue, id_bloque_vie)
-SELECT g.id_grupo, m.clave_materia,
-       2 AS lun, 2 AS mar, 2 AS mie, 2 AS jue, 2 AS vie
-FROM   grupo g
-JOIN   materia m ON m.semestre = 3
-WHERE  g.semestre = 3;
+-- Grupo de 3er semestre:
+--  B -> bloque 1
+--  D -> bloque 2
+--  G -> bloque 3
+--  H -> bloque 4
+INSERT INTO grupo_materia (id_grupo, clave_materia,
+                           id_bloque_lun, id_bloque_mar, id_bloque_mie, id_bloque_jue, id_bloque_vie)
+SELECT 
+    g.id_grupo,
+    m.clave_materia,
+    CASE m.clave_materia
+        WHEN 'B' THEN 1
+        WHEN 'D' THEN 2
+        WHEN 'G' THEN 3
+        WHEN 'H' THEN 4
+    END AS id_bloque_lun,
+    CASE m.clave_materia
+        WHEN 'B' THEN 1
+        WHEN 'D' THEN 2
+        WHEN 'G' THEN 3
+        WHEN 'H' THEN 4
+    END AS id_bloque_mar,
+    CASE m.clave_materia
+        WHEN 'B' THEN 1
+        WHEN 'D' THEN 2
+        WHEN 'G' THEN 3
+        WHEN 'H' THEN 4
+    END AS id_bloque_mie,
+    CASE m.clave_materia
+        WHEN 'B' THEN 1
+        WHEN 'D' THEN 2
+        WHEN 'G' THEN 3
+        WHEN 'H' THEN 4
+    END AS id_bloque_jue,
+    CASE m.clave_materia
+        WHEN 'B' THEN 1
+        WHEN 'D' THEN 2
+        WHEN 'G' THEN 3
+        WHEN 'H' THEN 4
+    END AS id_bloque_vie
+FROM grupo g
+JOIN materia m ON m.semestre = 3
+WHERE g.semestre = 3;
 
--- Grupo de 5to semestre: bloque 3
-INSERT INTO grupo_materia (id_grupo, clave_materia, id_bloque_lun, id_bloque_mar, id_bloque_mie, id_bloque_jue, id_bloque_vie)
-SELECT g.id_grupo, m.clave_materia,
-       3 AS lun, 3 AS mar, 3 AS mie, 3 AS jue, 3 AS vie
-FROM   grupo g
-JOIN   materia m ON m.semestre = 5
-WHERE  g.semestre = 5;
+-- Grupo de 5to semestre:
+--  E -> bloque 1
+--  K -> bloque 2
+--  L -> bloque 3
+--  I -> bloque 4
+INSERT INTO grupo_materia (id_grupo, clave_materia,
+                           id_bloque_lun, id_bloque_mar, id_bloque_mie, id_bloque_jue, id_bloque_vie)
+SELECT 
+    g.id_grupo,
+    m.clave_materia,
+    CASE m.clave_materia
+        WHEN 'E' THEN 1
+        WHEN 'K' THEN 2
+        WHEN 'L' THEN 3
+        WHEN 'I' THEN 4
+    END AS id_bloque_lun,
+    CASE m.clave_materia
+        WHEN 'E' THEN 1
+        WHEN 'K' THEN 2
+        WHEN 'L' THEN 3
+        WHEN 'I' THEN 4
+    END AS id_bloque_mar,
+    CASE m.clave_materia
+        WHEN 'E' THEN 1
+        WHEN 'K' THEN 2
+        WHEN 'L' THEN 3
+        WHEN 'I' THEN 4
+    END AS id_bloque_mie,
+    CASE m.clave_materia
+        WHEN 'E' THEN 1
+        WHEN 'K' THEN 2
+        WHEN 'L' THEN 3
+        WHEN 'I' THEN 4
+    END AS id_bloque_jue,
+    CASE m.clave_materia
+        WHEN 'E' THEN 1
+        WHEN 'K' THEN 2
+        WHEN 'L' THEN 3
+        WHEN 'I' THEN 4
+    END AS id_bloque_vie
+FROM grupo g
+JOIN materia m ON m.semestre = 5
+WHERE g.semestre = 5;

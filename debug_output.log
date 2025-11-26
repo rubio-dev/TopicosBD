@@ -1,15 +1,20 @@
-/* ============================================================
-   03_procedimientos.sql
-   Procedimientos almacenados (MariaDB)
-   ============================================================ */
+=== CONNECTION COLLATION ===
+collation_connection: utf8mb4_unicode_ci
+collation_database: utf8mb4_unicode_ci
+collation_server: utf8mb4_general_ci
 
-USE control_horarios;
+=== TABLE COLLATION (periodo_lectivo) ===
+Collation: utf8mb4_general_ci
 
-DELIMITER $$
+=== SP DEFINITION ===
+Database Collation: utf8mb4_unicode_ci
 
-CREATE PROCEDURE sp_crear_carga_automatica(
-    IN p_id_alumno  CHAR(8) COLLATE utf8mb4_general_ci,
-    IN p_id_periodo CHAR(6) COLLATE utf8mb4_general_ci,
+Warning: Undefined array key "Collation Connection" in C:\xampp\htdocs\TopicosBD\debug_collation.php on line 22
+Collation Connection: 
+Create Procedure: 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sp_crear_carga_automatica`(
+    IN p_id_alumno  CHAR(8) COLLATE utf8mb4_unicode_ci,
+    IN p_id_periodo CHAR(6) COLLATE utf8mb4_unicode_ci,
     IN p_id_grupo   INT
 )
 BEGIN
@@ -87,6 +92,4 @@ BEGIN
     WHERE gm.id_grupo = p_id_grupo;
 
     COMMIT;
-END$$
-
-DELIMITER ;
+END
