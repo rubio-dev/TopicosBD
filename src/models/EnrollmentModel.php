@@ -121,6 +121,19 @@ class EnrollmentModel
     {
         $pdo = db();
 
+        // 1. Verificar si ya existe una carga (activa o cancelada)
+        $stmt = $pdo->prepare("SELECT id_carga FROM carga_academica WHERE id_alumno = :al AND id_periodo = :pe LIMIT 1");
+        $stmt->execute([':al' => $idAlumno, ':pe' => $idPeriodo]);
+        $existingId = $stmt->fetchColumn();
+
+        if ($existingId) {
+            // Si existe, la reactivamos (estatus = 'A')
+            $pdo->prepare("UPDATE carga_academica SET estatus = 'A' WHERE id_carga = ?")
+                ->execute([$existingId]);
+            return (int)$existingId;
+        }
+
+        // 2. Si no existe, crear nueva
         $sql = "INSERT INTO carga_academica (id_alumno, id_periodo, estatus)
                 VALUES (:al, :pe, 'A')";
         $stmt = $pdo->prepare($sql);
@@ -151,7 +164,8 @@ class EnrollmentModel
                 m.nombre AS materia,
                 g.semestre,
                 g.paquete,
-                g.letra_grupo
+                g.letra_grupo,
+                gm.id_bloque_lun, gm.id_bloque_mar, gm.id_bloque_mie, gm.id_bloque_jue, gm.id_bloque_vie
             FROM alumno_materia am
             JOIN materia m
               ON m.clave_materia = am.clave_materia
@@ -205,7 +219,8 @@ class EnrollmentModel
                 m.nombre AS materia,
                 g.semestre,
                 g.paquete,
-                g.letra_grupo
+                g.letra_grupo,
+                gm.id_bloque_lun, gm.id_bloque_mar, gm.id_bloque_mie, gm.id_bloque_jue, gm.id_bloque_vie
             FROM materia m
             JOIN grupo_materia gm
               ON gm.clave_materia = m.clave_materia
@@ -262,13 +277,15 @@ class EnrollmentModel
 
     /**
      * Agrega una lista de materias (por id_grupo_materia) a la carga.
-     * - Inserta en carga_detalle (INSERT IGNORE para evitar duplicados)
-     * - Inserta en alumno_materia con estatus 'C' para el periodo si no existe registro
+     * - Valida colisiones de horario.
+     * - Inserta en carga_detalle (INSERT IGNORE para evitar duplicados).
+     * - Inserta en alumno_materia con estatus 'C' para el periodo si no existe registro.
      *
      * @param int      $idCarga
      * @param string   $idAlumno
      * @param string   $idPeriodo
      * @param int[]    $idGrupoMaterias
+     * @throws \RuntimeException Si hay colisión de horarios o error de BD.
      */
     public function addSubjectsToLoad(int $idCarga, string $idAlumno, string $idPeriodo, array $idGrupoMaterias): void
     {
@@ -281,6 +298,78 @@ class EnrollmentModel
         try {
             $pdo->beginTransaction();
 
+            // 0) Validar colisiones de horario
+            // Obtener horarios de materias ya cargadas
+            $sqlExisting = "
+                SELECT gm.id_grupo_materia, m.nombre,
+                       gm.id_bloque_lun, gm.id_bloque_mar, gm.id_bloque_mie, gm.id_bloque_jue, gm.id_bloque_vie
+                FROM carga_detalle cd
+                JOIN grupo_materia gm ON gm.id_grupo_materia = cd.id_grupo_materia
+                JOIN materia m ON m.clave_materia = gm.clave_materia
+                WHERE cd.id_carga = :c
+            ";
+            $stmtEx = $pdo->prepare($sqlExisting);
+            $stmtEx->execute([':c' => $idCarga]);
+            $existingSubjects = $stmtEx->fetchAll();
+
+            // Obtener horarios de materias nuevas a agregar
+            // (Usamos placeholders dinámicos para el array)
+            // Aseguramos que el array sea indexado numéricamente (0, 1, 2...) para execute()
+            $ids = array_values($idGrupoMaterias);
+            $inQuery = implode(',', array_fill(0, count($ids), '?'));
+            $sqlNew = "
+                SELECT gm.id_grupo_materia, m.nombre,
+                       gm.id_bloque_lun, gm.id_bloque_mar, gm.id_bloque_mie, gm.id_bloque_jue, gm.id_bloque_vie
+                FROM grupo_materia gm
+                JOIN materia m ON m.clave_materia = gm.clave_materia
+                WHERE gm.id_grupo_materia IN ($inQuery)
+            ";
+            $stmtNew = $pdo->prepare($sqlNew);
+            $stmtNew->execute($ids);
+            $newSubjects = $stmtNew->fetchAll();
+
+            // Verificar colisiones
+            $days = ['lun', 'mar', 'mie', 'jue', 'vie'];
+
+            foreach ($newSubjects as $newSub) {
+                // Verificar contra existentes
+                foreach ($existingSubjects as $exSub) {
+                    foreach ($days as $day) {
+                        $col = 'id_bloque_' . $day;
+                        
+                        if ($newSub[$col] !== null && $exSub[$col] !== null && $newSub[$col] == $exSub[$col]) {
+                            throw new \RuntimeException(sprintf(
+                                "Choque de horario: '%s' choca con '%s' en el bloque %s del día %s.",
+                                $newSub['nombre'],
+                                $exSub['nombre'],
+                                $newSub[$col],
+                                ucfirst($day)
+                            ));
+                        }
+                    }
+                }
+
+                // Verificar contra otras nuevas (autocolisión)
+                foreach ($newSubjects as $otherNew) {
+                    if ($newSub['id_grupo_materia'] === $otherNew['id_grupo_materia']) {
+                        continue;
+                    }
+                    foreach ($days as $day) {
+                        $col = 'id_bloque_' . $day;
+                        if ($newSub[$col] !== null && $otherNew[$col] !== null && $newSub[$col] == $otherNew[$col]) {
+                             throw new \RuntimeException(sprintf(
+                                "Choque de horario en selección: '%s' choca con '%s' en el bloque %s del día %s.",
+                                $newSub['nombre'],
+                                $otherNew['nombre'],
+                                $newSub[$col],
+                                ucfirst($day)
+                            ));
+                        }
+                    }
+                }
+            }
+
+            // Si no hay colisiones, procedemos a insertar
             foreach ($idGrupoMaterias as $idGM) {
                 $idGM = (int)$idGM;
                 if ($idGM <= 0) {
@@ -304,7 +393,8 @@ class EnrollmentModel
                 $row = $stmtInfo->fetch();
 
                 if (!$row) {
-                    continue; // grupo_materia no corresponde al periodo, lo ignoramos
+                    // Podríamos lanzar excepción aquí si queremos ser estrictos
+                    continue; 
                 }
 
                 $clave = (string)$row['clave_materia'];
@@ -329,16 +419,19 @@ class EnrollmentModel
                     WHERE NOT EXISTS (
                         SELECT 1
                         FROM alumno_materia
-                        WHERE id_alumno = :al
-                          AND clave_materia = :clave
-                          AND id_periodo = :pe
+                        WHERE id_alumno = :al2
+                          AND clave_materia = :clave2
+                          AND id_periodo = :pe2
                     )
                 ";
                 $stmtAm = $pdo->prepare($sqlAm);
                 $stmtAm->execute([
-                    ':al'    => $idAlumno,
-                    ':clave' => $clave,
-                    ':pe'    => $idPeriodo,
+                    ':al'     => $idAlumno,
+                    ':clave'  => $clave,
+                    ':pe'     => $idPeriodo,
+                    ':al2'    => $idAlumno,
+                    ':clave2' => $clave,
+                    ':pe2'    => $idPeriodo,
                 ]);
             }
 
@@ -412,5 +505,50 @@ class EnrollmentModel
             }
             throw $e;
         }
+    }
+
+    /**
+     * Obtiene todos los bloques horarios (id => etiqueta).
+     * @return array
+     */
+    public function getAllBlocks(): array
+    {
+        $pdo = db();
+        $stmt = $pdo->query("SELECT id_bloque, etiqueta FROM bloque_horario");
+        return $stmt->fetchAll(\PDO::FETCH_KEY_PAIR);
+    }
+
+    /**
+     * Sugiere un grupo para 1er semestre basado en balanceo de carga (el menos lleno).
+     * @param string $idPeriodo
+     * @return array|null Datos del grupo sugerido o null
+     */
+    public function suggestGroupForFirstSemester(string $idPeriodo): ?array
+    {
+        $pdo = db();
+        // Contamos cuántos alumnos hay en cada grupo de 1er semestre
+        // (Contamos entradas en carga_detalle asociadas a grupos de ese semestre)
+        $sql = "
+            SELECT g.id_grupo, g.paquete, g.letra_grupo,
+                   (
+                       SELECT COUNT(DISTINCT ca.id_alumno)
+                       FROM carga_academica ca
+                       JOIN carga_detalle cd ON cd.id_carga = ca.id_carga
+                       JOIN grupo_materia gm ON gm.id_grupo_materia = cd.id_grupo_materia
+                       WHERE gm.id_grupo = g.id_grupo
+                         AND ca.estatus = 'A'
+                   ) as inscritos
+            FROM grupo g
+            WHERE g.semestre = 1
+              AND g.id_periodo = :pe
+            ORDER BY inscritos ASC, g.paquete ASC
+            LIMIT 1
+        ";
+        
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([':pe' => $idPeriodo]);
+        $row = $stmt->fetch();
+        
+        return $row ?: null;
     }
 }

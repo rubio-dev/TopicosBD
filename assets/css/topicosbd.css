@@ -619,6 +619,181 @@ body.tb-body-simple {
         align-items: flex-start;
         gap: 10px;
     }
+}
+
+.tb-form-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: flex-end;
+}
+
+.tb-form-row {
+    margin-bottom: 12px;
+}
+
+.tb-label {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.tb-input {
+    width: 100%;
+    padding: 7px 9px;
+    font-size: 13px;
+    border-radius: var(--tb-radius-input);
+    border: 1px solid rgba(148, 163, 184, 0.9);
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.12s ease-out, box-shadow 0.12s ease-out;
+}
+
+.tb-input:focus {
+    border-color: rgba(94, 234, 212, 0.9);
+    box-shadow: 0 0 0 1px rgba(94, 234, 212, 0.6);
+}
+
+.tb-inline-fields {
+    display: flex;
+    gap: 8px;
+}
+
+.tb-input-small {
+    width: 100px;
+}
+
+.tb-form-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+}
+
+/* LISTA DE ERRORES */
+
+.tb-error-list {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+}
+
+/* GRUPOS */
+
+.tb-groups-title {
+    margin: 16px 0 8px;
+    font-size: 15px;
+}
+
+.tb-groups-block {
+    margin-top: 12px;
+}
+
+.tb-groups-semester {
+    margin: 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+/* INFO DE GRUPO (HORARIO) */
+
+.tb-group-info {
+    margin-bottom: 10px;
+    font-size: 13px;
+}
+
+.tb-group-info p {
+    margin: 3px 0;
+}
+
+/* FOOTER */
+
+.tb-footer {
+    max-width: 1120px;
+    margin: 0 auto 18px;
+    padding: 0 20px;
+    font-size: 11px;
+    opacity: 0.7;
+}
+
+/* UTILITIES */
+
+.tb-separator {
+    margin: 18px 0;
+    border: none;
+    border-top: 1px solid rgba(148, 163, 184, 0.4);
+}
+
+.tb-separator-dashed {
+    margin: 18px 0;
+    border: none;
+    border-top: 1px dashed rgba(148, 163, 184, 0.6);
+}
+
+.tb-flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.tb-text-small {
+    font-size: 13px;
+}
+
+.tb-text-xsmall {
+    font-size: 12px;
+}
+
+.tb-text-muted {
+    opacity: 0.8;
+}
+
+.tb-mt-2 {
+    margin-top: 8px;
+}
+
+.tb-mt-4 {
+    margin-top: 16px;
+}
+
+.tb-mb-1 {
+    margin-bottom: 4px;
+}
+
+.tb-mb-2 {
+    margin-bottom: 8px;
+}
+
+.tb-mb-3 {
+    margin-bottom: 12px;
+}
+
+.tb-row-red {
+    background-color: rgba(239, 68, 68, 0.05);
+}
+
+.tb-row-blue {
+    background-color: rgba(59, 130, 246, 0.05);
+}
+
+.tb-font-bold {
+    font-weight: 600;
+}
+
+.tb-table-compact td,
+.tb-table-compact th {
+    padding: 6px 8px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 640px) {
+    .tb-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
 
     .tb-section {
         padding: 18px 14px 20px;
@@ -637,4 +812,103 @@ body.tb-body-simple {
     .tb-col-actions {
         width: 140px;
     }
+}
+
+/* ===============================
+   OPTIMIZACIONES UI (Paquetes & Badges)
+   =============================== */
+
+/* Grid de Paquetes */
+.tb-package-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+}
+
+.tb-package-option {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    border: 2px solid var(--tb-border-soft);
+    border-radius: var(--tb-radius-card);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background: #ffffff;
+    text-align: center;
+}
+
+.tb-package-option:hover {
+    border-color: var(--tb-teal);
+    box-shadow: var(--tb-shadow-hover);
+    transform: translateY(-3px);
+}
+
+/* Ocultar radio nativo pero mantener accesibilidad */
+.tb-package-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Estilos cuando está seleccionado (usando :has para navegadores modernos) */
+.tb-package-option:has(input:checked) {
+    border-color: var(--tb-teal);
+    background-color: rgba(139, 211, 206, 0.08);
+    box-shadow: var(--tb-shadow-soft);
+}
+
+.tb-package-title {
+    font-family: var(--tb-font-title);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--tb-ink);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.tb-package-subtitle {
+    font-size: 13px;
+    color: #64748b;
+    display: block;
+}
+
+.tb-package-option input:checked+.tb-package-title {
+    color: var(--tb-teal);
+}
+
+/* Badge Irregular */
+.tb-badge-irregular {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    background-color: #fef2f2;
+    color: #ef4444;
+    border: 1px solid #fecaca;
+    border-radius: var(--tb-radius-chip);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-left: 8px;
+}
+
+/* Animación de entrada suave */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.tb-card,
+.tb-section {
+    animation: fadeInScale 0.3s ease-out forwards;
 }
