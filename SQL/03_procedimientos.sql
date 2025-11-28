@@ -92,8 +92,28 @@ BEGIN
             SET MESSAGE_TEXT = 'El alumno no cumple con los prerequisitos de alguna materia del grupo';
     END IF;
 
-    /* 5. Inicio de Transacción */
+    /* 5. Inicio de Transacción y Bloqueo (Concurrency Control) */
     START TRANSACTION;
+
+    /* 
+       Bloqueamos la fila del grupo para evitar condiciones de carrera.
+       Al hacer SELECT ... FOR UPDATE, ninguna otra transacción podrá
+       leer ni modificar este grupo hasta que terminemos.
+    */
+    IF (
+        SELECT COUNT(DISTINCT cd.id_carga)
+        FROM carga_detalle cd
+        JOIN carga_academica ca ON ca.id_carga = cd.id_carga
+        JOIN grupo_materia gm ON gm.id_grupo_materia = cd.id_grupo_materia
+        WHERE gm.id_grupo = p_id_grupo
+          AND ca.estatus = 'A'
+    ) >= (
+        SELECT cupo FROM grupo WHERE id_grupo = p_id_grupo FOR UPDATE
+    ) THEN
+        ROLLBACK;
+        SIGNAL SQLSTATE '45000'
+            SET MESSAGE_TEXT = 'El grupo seleccionado no tiene cupo disponible (Concurrency Safe)';
+    END IF;
 
     /* 6. Crear o Reactivar Carga */
     -- Buscamos si ya existe un registro de carga (aunque esté cancelado 'C')

@@ -304,6 +304,7 @@ declare(strict_types=1);
                                         <th>Clave</th>
                                         <th>Materia</th>
                                         <th>Paquete/Grupo</th>
+                                        <th>Cupo</th>
                                         <th>Horario</th>
                                     </tr>
                                     </thead>
@@ -331,6 +332,9 @@ declare(strict_types=1);
                                                 · <?= htmlspecialchars($op['paquete'], ENT_QUOTES, 'UTF-8') ?>
                                                 · <?= htmlspecialchars($op['letra_grupo'], ENT_QUOTES, 'UTF-8') ?>
                                             </td>
+                                            <td>
+                                                <?= (int)$op['inscritos'] ?> / <?= (int)$op['cupo'] ?>
+                                            </td>
                                             <td class="tb-text-xsmall">
                                                 <?= htmlspecialchars($op['schedule_text'] ?? '', ENT_QUOTES, 'UTF-8') ?>
                                             </td>
@@ -351,6 +355,7 @@ declare(strict_types=1);
                                         <th>Clave</th>
                                         <th>Materia</th>
                                         <th>Paquete/Grupo</th>
+                                        <th>Cupo</th>
                                         <th>Horario</th>
                                     </tr>
                                     </thead>
@@ -369,6 +374,9 @@ declare(strict_types=1);
                                                 Sem <?= htmlspecialchars((string)$op['semestre'], ENT_QUOTES, 'UTF-8') ?>
                                                 · <?= htmlspecialchars($op['paquete'], ENT_QUOTES, 'UTF-8') ?>
                                                 · <?= htmlspecialchars($op['letra_grupo'], ENT_QUOTES, 'UTF-8') ?>
+                                            </td>
+                                            <td>
+                                                <?= (int)$op['inscritos'] ?> / <?= (int)$op['cupo'] ?>
                                             </td>
                                             <td class="tb-text-xsmall">
                                                 <?= htmlspecialchars($op['schedule_text'] ?? '', ENT_QUOTES, 'UTF-8') ?>

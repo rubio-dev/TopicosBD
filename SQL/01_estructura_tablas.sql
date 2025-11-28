@@ -10,6 +10,23 @@ CREATE DATABASE IF NOT EXISTS control_horarios
 USE control_horarios;
 
 /* ============================
+   0. Limpieza de tablas previas
+   ============================ */
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS carga_detalle;
+DROP TABLE IF EXISTS carga_academica;
+DROP TABLE IF EXISTS grupo_materia;
+DROP TABLE IF EXISTS grupo;
+DROP TABLE IF EXISTS bloque_horario;
+DROP TABLE IF EXISTS alumno_materia;
+DROP TABLE IF EXISTS alumno;
+DROP TABLE IF EXISTS materia_prerequisito;
+DROP TABLE IF EXISTS materia;
+DROP TABLE IF EXISTS periodo_lectivo;
+DROP TABLE IF EXISTS semestre;
+SET FOREIGN_KEY_CHECKS = 1;
+
+/* ============================
    1. Catálogo de SEMESTRES
    ============================ */
 
@@ -128,6 +145,7 @@ CREATE TABLE grupo (
     semestre    TINYINT NOT NULL,
     paquete     CHAR(2) NOT NULL,
     letra_grupo CHAR(1) NOT NULL,
+    cupo        TINYINT NOT NULL DEFAULT 10,
     PRIMARY KEY (id_grupo),
     CONSTRAINT fk_grupo_periodo
         FOREIGN KEY (id_periodo) REFERENCES periodo_lectivo(id_periodo),
@@ -196,3 +214,19 @@ CREATE TABLE carga_detalle (
         FOREIGN KEY (id_grupo_materia) REFERENCES grupo_materia(id_grupo_materia),
     CONSTRAINT uq_cd UNIQUE (id_carga, id_grupo_materia)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+/* ============================
+   12. INDICES DE RENDIMIENTO
+   ============================ */
+
+/* Búsqueda rápida de grupos por periodo y semestre */
+CREATE INDEX idx_grupo_periodo_semestre 
+    ON grupo (id_periodo, semestre);
+
+/* Búsqueda rápida de grupos por materia (para joins) */
+CREATE INDEX idx_gm_clave 
+    ON grupo_materia (clave_materia);
+
+/* Búsqueda rápida de historial por alumno y periodo */
+CREATE INDEX idx_am_alumno_periodo 
+    ON alumno_materia (id_alumno, id_periodo);

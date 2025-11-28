@@ -76,18 +76,34 @@ INSERT INTO bloque_horario (id_bloque, hora_inicio, hora_fin, etiqueta) VALUES
    ============================ */
 
 INSERT INTO alumno (id_alumno, anio_ingreso, ciclo_ingreso, nombre, semestre_actual) VALUES
-/* Semestre 1 (Ingreso 2025-02) */
+/* Semestre 1 (Ingreso 2025-02) - 10 Alumnos */
 ('25020001', 2025, '02', 'Carlos Lopez',       1),
 ('25020002', 2025, '02', 'Ana Ramirez',        1),
 ('25020003', 2025, '02', 'Luis Sanchez',       1),
 ('25020004', 2025, '02', 'Maria Torres',       1),
 ('25020005', 2025, '02', 'Jorge Fernandez',    1),
-('25020006', 2025, '02', 'Lucia Hernandez',    1),
-('25020007', 2025, '02', 'Pedro Garcia',       1),
-('25020008', 2025, '02', 'Elena Morales',      1),
-('25020009', 2025, '02', 'Diego Cruz',         1),
-('25020010', 2025, '02', 'Sara Vega',          1),
-/* Semestre 3 (Ingreso 2024-02) */
+('25020011', 2025, '02', 'Roberto Gil',        1),
+('25020012', 2025, '02', 'Julia Mendez',       1),
+('25020013', 2025, '02', 'Mario Ortega',       1),
+('25020014', 2025, '02', 'Laura Salas',        1),
+('25020015', 2025, '02', 'Francisco Ruiz',     1),
+('25020016', 2025, '02', 'Carmen Diaz',        1),
+('25020017', 2025, '02', 'Manuel Ramos',       1),
+('25020018', 2025, '02', 'Rosa Flores',        1),
+('25020019', 2025, '02', 'Javier Romero',      1),
+('25020020', 2025, '02', 'Teresa Medina',      1),
+('25020021', 2025, '02', 'Hugo Chavez',        1),
+('25020022', 2025, '02', 'Valentina Solis',    1),
+('25020023', 2025, '02', 'Martin Espinoza',    1),
+('25020024', 2025, '02', 'Gloria Benitez',     1),
+('25020025', 2025, '02', 'Ramon Fuentes',      1),
+('25020026', 2025, '02', 'Silvia Navarro',     1),
+('25020027', 2025, '02', 'Alberto Cabrera',    1),
+('25020028', 2025, '02', 'Monica Valencia',    1),
+('25020029', 2025, '02', 'Raul Aguirre',       1),
+('25020030', 2025, '02', 'Patricia Salinas',   1),
+
+/* Semestre 3 (Ingreso 2024-02) - 30 Alumnos */
 ('24020001', 2024, '02', 'Andres Navarro',     3),
 ('24020002', 2024, '02', 'Patricia Flores',    3),
 ('24020003', 2024, '02', 'Ruben Castro',       3),
@@ -98,7 +114,28 @@ INSERT INTO alumno (id_alumno, anio_ingreso, ciclo_ingreso, nombre, semestre_act
 ('24020008', 2024, '02', 'Claudia Guzman',     3),
 ('24020009', 2024, '02', 'Ivan Mendoza',       3),
 ('24020010', 2024, '02', 'Alejandra Soto',     3),
-/* Semestre 5 (Ingreso 2023-02) */
+('24020011', 2024, '02', 'Victor Hugo',        3),
+('24020012', 2024, '02', 'Ximena Paz',         3),
+('24020013', 2024, '02', 'Oscar Leon',         3),
+('24020014', 2024, '02', 'Natalia Silva',      3),
+('24020015', 2024, '02', 'Gustavo Lara',       3),
+('24020016', 2024, '02', 'Isabel Vega',        3),
+('24020017', 2024, '02', 'Pablo Duran',        3),
+('24020018', 2024, '02', 'Lorena Cano',        3),
+('24020019', 2024, '02', 'Emilio Solis',       3),
+('24020020', 2024, '02', 'Fernanda Mora',      3),
+('24020021', 2024, '02', 'Ricardo Pena',       3),
+('24020022', 2024, '02', 'Sonia Rivas',        3),
+('24020023', 2024, '02', 'Felipe Cardenas',    3),
+('24020024', 2024, '02', 'Alicia Miranda',     3),
+('24020025', 2024, '02', 'Roberto Ayala',      3),
+('24020026', 2024, '02', 'Cecilia Orozco',     3),
+('24020027', 2024, '02', 'Jaime Robles',       3),
+('24020028', 2024, '02', 'Mariana Pacheco',    3),
+('24020029', 2024, '02', 'Enrique Serrano',    3),
+('24020030', 2024, '02', 'Luz Barrera',        3),
+
+/* Semestre 5 (Ingreso 2023-02) - 30 Alumnos */
 ('23020001', 2023, '02', 'Fernando Ortiz',     5),
 ('23020002', 2023, '02', 'Gabriela Silva',     5),
 ('23020003', 2023, '02', 'Rafael Pineda',      5),
@@ -108,39 +145,105 @@ INSERT INTO alumno (id_alumno, anio_ingreso, ciclo_ingreso, nombre, semestre_act
 ('23020007', 2023, '02', 'Miguel Dominguez',   5),
 ('23020008', 2023, '02', 'Liliana Bravo',      5),
 ('23020009', 2023, '02', 'Ricardo Estrada',    5),
-('23020010', 2023, '02', 'Adriana Nunez',      5);
+('23020010', 2023, '02', 'Adriana Nunez',      5),
+('23020011', 2023, '02', 'Alberto Rios',       5),
+('23020012', 2023, '02', 'Beatriz Lara',       5),
+('23020013', 2023, '02', 'Cesar Montes',       5),
+('23020014', 2023, '02', 'Diana Pena',         5),
+('23020015', 2023, '02', 'Esteban Vera',       5),
+('23020016', 2023, '02', 'Fatima Cruz',        5),
+('23020017', 2023, '02', 'Gabriel Rivas',      5),
+('23020018', 2023, '02', 'Hilda Mejia',        5),
+('23020019', 2023, '02', 'Ignacio Varela',     5),
+('23020020', 2023, '02', 'Juana Ibarra',       5),
+('23020021', 2023, '02', 'Marcos Gallegos',    5),
+('23020022', 2023, '02', 'Noemi Villalobos',   5),
+('23020023', 2023, '02', 'Omar Andrade',       5),
+('23020024', 2023, '02', 'Pilar Cuevas',       5),
+('23020025', 2023, '02', 'Quetzalcoatl Perez', 5),
+('23020026', 2023, '02', 'Rebeca Tovar',       5),
+('23020027', 2023, '02', 'Samuel Ochoa',       5),
+('23020028', 2023, '02', 'Tania Macias',       5),
+('23020029', 2023, '02', 'Ulises Zamora',      5),
+('23020030', 2023, '02', 'Violeta Arellano',   5);
 
 /* ============================
    3. Historial Académico (Calificaciones)
    ============================ */
 
+/* 
+   NOTA: Los alumnos de 1er semestre NO tienen historial.
+*/
+
 /* Historial para alumnos de 3er semestre (Aprobaron 1ro) */
+/* CASO 1: Alumnos regulares (Aprobados) - Todos MENOS el 24020001 y 24020005 */
 INSERT INTO alumno_materia (id_alumno, clave_materia, id_periodo, calificacion, tipo_acred, estatus)
 SELECT id_alumno, m.clave_materia, '202402', 
-       FLOOR(80 + (RAND() * 20)), -- Calificación aleatoria entre 80 y 100
+       FLOOR(80 + (RAND() * 20)), -- 80-100
        1, 'A'
 FROM alumno a
 JOIN materia m ON m.semestre = 1
-WHERE a.semestre_actual = 3;
+WHERE a.semestre_actual = 3
+  AND a.id_alumno NOT IN ('24020001', '24020005');
+
+/* CASO 2: Alumnos IRREGULARES (Casos específicos) */
+-- 24020001: Reprobó Matemáticas I (A)
+INSERT INTO alumno_materia (id_alumno, clave_materia, id_periodo, calificacion, tipo_acred, estatus)
+SELECT '24020001', m.clave_materia, '202402',
+       CASE WHEN m.clave_materia = 'A' THEN 60 ELSE FLOOR(80 + (RAND() * 20)) END,
+       1,
+       CASE WHEN m.clave_materia = 'A' THEN 'R' ELSE 'A' END
+FROM materia m WHERE m.semestre = 1;
+
+-- 24020005: Reprobó Programación I (F)
+INSERT INTO alumno_materia (id_alumno, clave_materia, id_periodo, calificacion, tipo_acred, estatus)
+SELECT '24020005', m.clave_materia, '202402',
+       CASE WHEN m.clave_materia = 'F' THEN 55 ELSE FLOOR(80 + (RAND() * 20)) END,
+       1,
+       CASE WHEN m.clave_materia = 'F' THEN 'R' ELSE 'A' END
+FROM materia m WHERE m.semestre = 1;
+
 
 /* Historial para alumnos de 5to semestre (Aprobaron 1ro y 3ro) */
+/* Generación aleatoria de reprobados (15% probabilidad) */
+
 -- 1er semestre (en 2023)
 INSERT INTO alumno_materia (id_alumno, clave_materia, id_periodo, calificacion, tipo_acred, estatus)
 SELECT id_alumno, m.clave_materia, '202302', 
-       FLOOR(80 + (RAND() * 20)), 
-       1, 'A'
+       CASE 
+         WHEN RAND() < 0.15 THEN FLOOR(50 + (RAND() * 19)) -- Reprobado (50-69)
+         ELSE FLOOR(70 + (RAND() * 30))                    -- Aprobado (70-100)
+       END, 
+       1, 
+       'A' -- Temporalmente asumimos 'A' para simplificar, luego corregimos estatus
 FROM alumno a
 JOIN materia m ON m.semestre = 1
 WHERE a.semestre_actual = 5;
+
+-- Corregir estatus basado en calificación
+UPDATE alumno_materia 
+SET estatus = IF(calificacion < 70, 'R', 'A')
+WHERE id_periodo = '202302' AND estatus = 'A';
+
 
 -- 3er semestre (en 2024)
 INSERT INTO alumno_materia (id_alumno, clave_materia, id_periodo, calificacion, tipo_acred, estatus)
 SELECT id_alumno, m.clave_materia, '202402', 
-       FLOOR(80 + (RAND() * 20)), 
-       1, 'A'
+       CASE 
+         WHEN RAND() < 0.15 THEN FLOOR(50 + (RAND() * 19)) 
+         ELSE FLOOR(70 + (RAND() * 30)) 
+       END, 
+       1, 
+       'A'
 FROM alumno a
 JOIN materia m ON m.semestre = 3
 WHERE a.semestre_actual = 5;
+
+-- Corregir estatus
+UPDATE alumno_materia 
+SET estatus = IF(calificacion < 70, 'R', 'A')
+WHERE id_periodo = '202402' AND estatus = 'A';
+
 
 /* ============================
    4. Grupos y Horarios (Paquetes A, B, C)

@@ -165,6 +165,15 @@ class EnrollmentModel
                 g.semestre,
                 g.paquete,
                 g.letra_grupo,
+                g.cupo,
+                (
+                    SELECT COUNT(DISTINCT ca.id_alumno)
+                    FROM carga_academica ca
+                    JOIN carga_detalle cd ON cd.id_carga = ca.id_carga
+                    JOIN grupo_materia gm2 ON gm2.id_grupo_materia = cd.id_grupo_materia
+                    WHERE gm2.id_grupo = g.id_grupo
+                      AND ca.estatus = 'A'
+                ) as inscritos,
                 gm.id_bloque_lun, gm.id_bloque_mar, gm.id_bloque_mie, gm.id_bloque_jue, gm.id_bloque_vie
             FROM alumno_materia am
             JOIN materia m
@@ -220,6 +229,15 @@ class EnrollmentModel
                 g.semestre,
                 g.paquete,
                 g.letra_grupo,
+                g.cupo,
+                (
+                    SELECT COUNT(DISTINCT ca.id_alumno)
+                    FROM carga_academica ca
+                    JOIN carga_detalle cd ON cd.id_carga = ca.id_carga
+                    JOIN grupo_materia gm2 ON gm2.id_grupo_materia = cd.id_grupo_materia
+                    WHERE gm2.id_grupo = g.id_grupo
+                      AND ca.estatus = 'A'
+                ) as inscritos,
                 gm.id_bloque_lun, gm.id_bloque_mar, gm.id_bloque_mie, gm.id_bloque_jue, gm.id_bloque_vie
             FROM materia m
             JOIN grupo_materia gm
@@ -529,7 +547,7 @@ class EnrollmentModel
         // Contamos cuántos alumnos hay en cada grupo de 1er semestre
         // (Contamos entradas en carga_detalle asociadas a grupos de ese semestre)
         $sql = "
-            SELECT g.id_grupo, g.paquete, g.letra_grupo,
+            SELECT g.id_grupo, g.paquete, g.letra_grupo, g.cupo,
                    (
                        SELECT COUNT(DISTINCT ca.id_alumno)
                        FROM carga_academica ca
@@ -541,6 +559,7 @@ class EnrollmentModel
             FROM grupo g
             WHERE g.semestre = 1
               AND g.id_periodo = :pe
+            HAVING inscritos < g.cupo
             ORDER BY inscritos ASC, g.paquete ASC
             LIMIT 1
         ";
